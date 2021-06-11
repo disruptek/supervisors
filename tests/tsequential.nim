@@ -1,12 +1,12 @@
 import balls
 import cps
 
-import supervisors/collector
+import supervisors/sequential
 
-suite "collector":
+suite "sequential":
 
   block:
-    ## test of the collector
+    ## test of sequential
     type
       C = ref object of Continuation
 
@@ -18,6 +18,10 @@ suite "collector":
       noop()
       for i in 0 .. y:
         inc x
+      case y
+      of 2: check x == 4
+      of 3: check x == 10
+      else: fail"unexpected"
 
     proc foo(y: int) {.cps: C.} =
       inc x
@@ -27,5 +31,9 @@ suite "collector":
     let a: Continuation = whelp foo(2)
     let b: Continuation = whelp foo(3)
 
-    collector @[a, b]
+    let cs = sequential @[a, b]
     check x == 11
+    for c in cs.items:
+      check "bad member continuation state":
+        not c.dismissed
+        c.finished
