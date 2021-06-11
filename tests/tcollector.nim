@@ -24,8 +24,8 @@ suite "collector":
       bar(y)
       inc x
 
-    let a = whelp foo(2)
-    let b = whelp foo(3)
+    let a: Continuation = whelp foo(2)
+    let b: Continuation = whelp foo(3)
 
     collector @[a, b]
     check x == 9
