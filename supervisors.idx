@@ -1,0 +1,1 @@
+collector	supervisors.html#collector,seq[Continuation]	supervisors: collector(cs: seq[Continuation])	
